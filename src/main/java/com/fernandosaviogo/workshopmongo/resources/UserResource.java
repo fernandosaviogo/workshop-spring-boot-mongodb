@@ -53,9 +53,18 @@ public class UserResource {
 	}
 
 	// Metodo DELETE filtrando por ID
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE) // Pode ser trocado por @GetMapping
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE) // Pode ser trocado por @DelteMapping
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	// Metodo PUT
+		@RequestMapping(value = "/{id}", method = RequestMethod.PUT) // Pode ser trocado por @PuttMapping
+		public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
+			User obj = service.fromDTO(objDto);
+			obj.setId(id);
+			obj = service.update(obj);
+			return ResponseEntity.noContent().build();
+		}
 }
