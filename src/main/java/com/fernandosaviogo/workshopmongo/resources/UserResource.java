@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fernandosaviogo.workshopmongo.domain.Post;
 import com.fernandosaviogo.workshopmongo.domain.User;
 import com.fernandosaviogo.workshopmongo.dto.UserDTO;
 import com.fernandosaviogo.workshopmongo.services.UserService;
@@ -28,12 +29,9 @@ public class UserResource {
 	// Metodo GET
 	@RequestMapping(method = RequestMethod.GET) // Pode ser trocado por @GetMapping
 	public ResponseEntity<List<UserDTO>> findAll() {
-
 		List<User> list = service.findAll(); // Busca os usuários no banco e quarda na lista
-		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList()); // Converte cada
-																										// obj da lista
-																										// para um DTO
-		return ResponseEntity.ok().body(listDto);
+		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList()); // Converte cada obj da lista para um DTO
+		return ResponseEntity.ok().body(listDto);																								 
 	}
 
 	// Metodo GET filtrando por ID
@@ -58,13 +56,20 @@ public class UserResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	// Metodo PUT
-		@RequestMapping(value = "/{id}", method = RequestMethod.PUT) // Pode ser trocado por @PuttMapping
-		public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
-			User obj = service.fromDTO(objDto);
-			obj.setId(id);
-			obj = service.update(obj);
-			return ResponseEntity.noContent().build();
-		}
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT) // Pode ser trocado por @PuttMapping
+	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
+		User obj = service.fromDTO(objDto);
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+
+	// Metodo GET filtrando por ID para buscar posts
+	@RequestMapping(value = "/{id}/posts", method = RequestMethod.GET) // Pode ser trocado por @GetMapping
+	public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+		User obj = service.findById(id);
+		return ResponseEntity.ok().body(obj.getPosts());
+	}
 }
