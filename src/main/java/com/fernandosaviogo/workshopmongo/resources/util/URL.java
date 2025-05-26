@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 
 public class URL {
 	
+	// Decodifica a URL da consulta
 	public static String decodeParam(String text) {
 		try {
 			return URLDecoder.decode(text, "UTF-8");
