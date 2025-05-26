@@ -1,13 +1,16 @@
 package com.fernandosaviogo.workshopmongo.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fernandosaviogo.workshopmongo.dto.AuthorDTO;
+import com.fernandosaviogo.workshopmongo.dto.CommentDTO;
 
 @Document  // Indica que a classe corresponde a uma coleção no MongoDB
 public class Post implements Serializable{
@@ -19,6 +22,8 @@ public class Post implements Serializable{
 	private String title;
 	private String body;
 	private AuthorDTO author;
+	
+	private List<CommentDTO> comments = new ArrayList<>();
 	
 	// Metodo construtor vazio
 	public Post() {
@@ -74,6 +79,14 @@ public class Post implements Serializable{
 
 	public void setAuthor(AuthorDTO author) {
 		this.author = author;
+	}
+	
+	public List<CommentDTO> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<CommentDTO> comments) {
+		this.comments = comments;
 	}
 	
 	// Metodo hashCode
