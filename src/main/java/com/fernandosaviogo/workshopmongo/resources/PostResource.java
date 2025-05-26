@@ -1,5 +1,6 @@
 package com.fernandosaviogo.workshopmongo.resources;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,22 @@ public class PostResource {
 
 	// Metodo GET filtrando titulo por uma string
 	@RequestMapping(value = "/titlesearch", method = RequestMethod.GET) // Pode ser trocado por @GetMapping
-	public ResponseEntity<List<Post>> findByTitle(@RequestParam(value="text", defaultValue = "") String text) {
+	public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
 		text = URL.decodeParam(text);
 		List<Post> list = service.findByTitle(text);
+		return ResponseEntity.ok().body(list);
+	}
+
+	// Metodo GET filtrando titulo por uma string com data minima e maxima
+	@RequestMapping(value = "/fullsearch", method = RequestMethod.GET) // Pode ser trocado por @GetMapping
+	public ResponseEntity<List<Post>> fullSearch(
+			@RequestParam(value = "text", defaultValue = "") String text,
+			@RequestParam(value = "minDate", defaultValue = "") String minDate,
+			@RequestParam(value = "maxDate", defaultValue = "") String maxDate) {
+		text = URL.decodeParam(text);
+		Date min = URL.convertDate(minDate, new Date(0L));
+		Date max = URL.convertDate(maxDate, new Date());
+		List<Post> list = service.fullSearch(text, min, max);
 		return ResponseEntity.ok().body(list);
 	}
 }
